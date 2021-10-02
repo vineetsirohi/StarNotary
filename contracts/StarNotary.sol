@@ -5,13 +5,12 @@ import "../node_modules/@openzeppelin/contracts/token/ERC721/ERC721.sol";
 contract StarNotary is ERC721 {
     struct Star {
         string name;
-        // string symbol;
     }
 
     mapping(uint256 => Star) public tokenIdToStarInfo;
     mapping(uint256 => uint256) public starsForSale;
 
-    constructor() public ERC721("", "") {}
+    constructor() public ERC721("StarNotary", "SNS") {}
 
     // Create Star using the Struct
     function createStar(
