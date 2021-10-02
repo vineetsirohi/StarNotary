@@ -60,4 +60,9 @@ contract StarNotary is ERC721 {
         Star memory star = tokenIdToStarInfo[_tokenId];
         return star.name;
     }
+
+    // Implement Task - Exchange Stars function
+    function exchangeStars(uint256 _tokenId1, uint256 _tokenId2) public {
+
+    }
 }
