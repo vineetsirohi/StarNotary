@@ -15,7 +15,7 @@ ERC-721 Token Symbol
 SNS
 
 “Token Address” on the Rinkeby Network
-0x19cae344bdbaf9635a43ae9266815edec507ab82
+0xe3f8af0d2cb79e09c082269e2d9e4adfcf30b8c6
 
 
 
