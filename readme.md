@@ -16,3 +16,9 @@ SNS
 
 “Token Address” on the Rinkeby Network
 0x19cae344bdbaf9635a43ae9266815edec507ab82
+
+
+
+// Instructions to add infurakey and mnemonic
+Create a text file "infurakey.secret" in the parent folder of the project and put key there.
+Same for "mnemonic.secret" file

@@ -6,7 +6,7 @@ const App = {
   account: null,
   meta: null,
 
-  start: async function() {
+  start: async function () {
     const { web3 } = this;
 
     try {
@@ -21,38 +21,45 @@ const App = {
       // get accounts
       const accounts = await web3.eth.getAccounts();
       this.account = accounts[0];
+      console.error("Account: " + this.account);
     } catch (error) {
       console.error("Could not connect to contract or chain.");
     }
   },
 
-  setStatus: function(message) {
+  setStatus: function (message) {
     const status = document.getElementById("status");
     status.innerHTML = message;
   },
 
-  createStar: async function() {
+  createStar: async function () {
     const { createStar } = this.meta.methods;
     const name = document.getElementById("starName").value;
-    const symbol = document.getElementById("starSymbol").value;
     const id = document.getElementById("starId").value;
-    await createStar(name, symbol, id).send({from: this.account});
+    await createStar(name, id).send({ from: this.account });
     App.setStatus("New Star Owner is " + this.account + ".");
   },
 
   // Implement Task 4 Modify the front end of the DAPP
-  lookUp: async function (){
+  lookUp: async function () {
     const { lookUptokenIdToStarInfo } = this.meta.methods;
-    const symbol = document.getElementById("lookid").value;
-    const name = await lookUptokenIdToStarInfo(symbol);
-    App.lookUp(name);
+    const tokenId = document.getElementById("lookid").value;
+    console.log("tokenId : " + tokenId);
+
+    const name = await lookUptokenIdToStarInfo(tokenId).call();
+
+    if (name.length == 0) {
+      App.setStatus("Star with id " + tokenId + " does not exist");
+    } else {
+      App.setStatus("Star with id " + tokenId + " is " + name);
+    }
   }
 
 };
 
 window.App = App;
 
-window.addEventListener("load", async function() {
+window.addEventListener("load", async function () {
   if (window.ethereum) {
     // use MetaMask's provider
     App.web3 = new Web3(window.ethereum);
