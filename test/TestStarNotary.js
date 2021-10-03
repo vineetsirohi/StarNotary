@@ -8,13 +8,13 @@ contract('StarNotary', (accs) => {
     owner = accounts[0];
 });
 
-// it('can Create a Star', async() => {
-//     let tokenId = 1;
-//     let instance = await StarNotary.deployed();
-//     await instance.createStar('Awesome Star!', tokenId, {from: accounts[0]});
-//     let star = await instance.tokenIdToStarInfo.call(tokenId);
-//     assert.equal(star, 'Awesome Star!')
-// });
+it('can Create a Star', async() => {
+    let tokenId = 1;
+    let instance = await StarNotary.deployed();
+    await instance.createStar('Awesome Star!', tokenId, {from: accounts[0]});
+    let star = await instance.tokenIdToStarInfo.call(tokenId);
+    assert.equal(star, 'Awesome Star!')
+});
 
 // it('lets user1 put up their star for sale', async() => {
 //     let instance = await StarNotary.deployed();
@@ -108,10 +108,31 @@ it('can add the star name and star symbol properly', async() => {
     assert.equal(await instance.symbol(), 'SNS');
 });
 
-it('lets 2 users exchange stars', async() => {
+it('lets 2 users exchange stars', async function() {
+    this.timeout(5000);
+
     // 1. create 2 Stars with different tokenId
     // 2. Call the exchangeStars functions implemented in the Smart Contract
     // 3. Verify that the owners changed
+    let instance = await StarNotary.deployed();
+
+    // Should result in exception as token ids don't exist
+    // await instance.exchangeStars(1, 2);
+
+    let tokenId1 = 21;
+    await instance.createStar('Star1', tokenId1, {from: accounts[0]});
+
+    let tokenId2 = 22;
+    await instance.createStar('Star2', tokenId2, {from: accounts[1]});
+
+    // Owner1 approves owner2 and vice-versa for exchange
+    await instance.approve(accounts[1], tokenId1, {from: accounts[0]});
+    await instance.approve(accounts[0], tokenId2, {from: accounts[1]});
+    
+    await instance.exchangeStars(tokenId1, tokenId2);
+
+    assert.equal(await instance.ownerOf(tokenId2), accounts[0]);
+    assert.equal(await instance.ownerOf(tokenId1), accounts[1]);
 });
 
 it('lets a user transfer a star', async() => {
