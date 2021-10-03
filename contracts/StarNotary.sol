@@ -59,18 +59,40 @@ contract StarNotary is ERC721 {
 
     // Implement Task - Exchange Stars function
     function exchangeStars(uint256 _tokenId1, uint256 _tokenId2) public {
-        require(_exists(_tokenId1) && _exists(_tokenId2), "One or both tokens don't exist");
+        require(
+            _exists(_tokenId1) && _exists(_tokenId2),
+            "One or both tokens don't exist"
+        );
 
         address ownerAddress1 = ownerOf(_tokenId1);
         address ownerAddress2 = ownerOf(_tokenId2);
 
-        require(ownerAddress1 != ownerAddress2, "Owner of tokens is same. No need for exchange");
+        require(
+            ownerAddress1 != ownerAddress2,
+            "Owner of tokens is same. No need for exchange"
+        );
 
-        require(_isApprovedOrOwner(ownerAddress1, _tokenId2), "Owner 1 not approved for token 2");
-        require(_isApprovedOrOwner(ownerAddress2, _tokenId1), "Owner 2 not approved for token 1");
+        require(
+            _isApprovedOrOwner(ownerAddress1, _tokenId2),
+            "Owner 1 not approved for token 2"
+        );
+        require(
+            _isApprovedOrOwner(ownerAddress2, _tokenId1),
+            "Owner 2 not approved for token 1"
+        );
 
         // exchange stars
         _transfer(ownerAddress1, ownerAddress2, _tokenId1);
         _transfer(ownerAddress2, ownerAddress1, _tokenId2);
+    }
+
+    function transferStar(address _to1, uint256 _tokenId) public {
+        require(
+            ownerOf(_tokenId) == msg.sender,
+            "Msg.sender is not the owner of tokenId"
+        );
+
+        // using the already implemented ERC721 function
+        _transfer(msg.sender, _to1, _tokenId);
     }
 }
